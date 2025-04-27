@@ -14,8 +14,13 @@ dev = [
 # project
 [project]
 authors = [{name = "Derek Wan", email = "d.wan@icloud.com"}]
-dependencies = []
-name = "dycw-template"
+dependencies = [
+  "atomicwrites>=1.4.1",
+  "dycw-utilities>=0.110.8",
+  "rich>=14.0.0",
+  "whenever>=0.7.3",
+]
+name = "polars-subclasses"
 readme = "README.md"
 requires-python = ">= 3.13"
 version = "0.1.0"
@@ -26,7 +31,7 @@ allow_dirty = true
 current_version = "0.1.0"
 
 [[tool.bumpversion.files]]
-filename = "src/dycw_template/__init__.py"
+filename = "src/polars_subclasses/__init__.py"
 replace = "__version__ = \"{new_version}\""
 search = "__version__ = \"{current_version}\""
 
@@ -54,7 +59,7 @@ parallel = true
 include = ["src"]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/dycw_template"]
+packages = ["src/polars_subclasses"]
 
 # nitpick
 [tool.nitpick]
@@ -98,7 +103,7 @@ addopts = [
   "-ra",
   "-vv",
   "--color=auto",
-  "--cov=dycw_template",
+  "--cov=polars_subclasses",
   "--cov-config=pyproject.toml",
   "--cov-report=html",
   "--strict-markers",

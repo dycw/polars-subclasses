@@ -1,1 +1,1 @@
-# `dycw-template`
+# `polars-subclasses`
