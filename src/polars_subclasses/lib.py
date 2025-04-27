@@ -164,6 +164,10 @@ class DataFrameWithMetaData(DataFrame, Generic[_T]):
         )
 
     @override
+    def reverse(self) -> Self:
+        return type(self)(data=super().reverse(), metadata=self.metadata)
+
+    @override
     def select(
         self, *exprs: IntoExpr | Iterable[IntoExpr], **named_exprs: IntoExpr
     ) -> Self:
