@@ -5,10 +5,13 @@ from hypothesis.strategies import DrawFn, booleans, composite, lists, tuples
 from polars import DataFrame, Int64, String, col
 from utilities.hypothesis import int64s, text_ascii
 
-from polars_subclasses.lib import DataFrameWithMetaData
+from polars_subclasses.lib import DataFrameWithMetaData, SeriesWithMetaData
 
 
-class DataFrameWithBool(DataFrameWithMetaData[bool]): ...
+class SeriesWithBool(SeriesWithMetaData[bool, "DataFrameWithBool"]): ...
+
+
+class DataFrameWithBool(DataFrameWithMetaData[bool, "SeriesWithBool"]): ...
 
 
 @composite
@@ -29,65 +32,77 @@ class TestDataFrameWithMetaData:
 
     @given(df=dataframes_with_bool())
     def test_drop(self, *, df: DataFrameWithBool) -> None:
-        self._assert(df.drop(), df)
+        self._assert_dataframe(df.drop(), df)
 
     @given(df=dataframes_with_bool())
     def test_drop_nans(self, *, df: DataFrameWithBool) -> None:
-        self._assert(df.drop_nans(), df)
+        self._assert_dataframe(df.drop_nans(), df)
 
     @given(df=dataframes_with_bool())
     def test_drop_nulls(self, *, df: DataFrameWithBool) -> None:
-        self._assert(df.drop_nulls(), df)
+        self._assert_dataframe(df.drop_nulls(), df)
 
     @given(df=dataframes_with_bool())
     def test_explode(self, *, df: DataFrameWithBool) -> None:
-        self._assert(df.group_by("x").agg(col("x").alias("xs")).explode("xs"), df)
+        self._assert_dataframe(
+            df.group_by("x").agg(col("x").alias("xs")).explode("xs"), df
+        )
 
     @given(df=dataframes_with_bool())
     def test_filter(self, *, df: DataFrameWithBool) -> None:
-        self._assert(df.filter(), df)
+        self._assert_dataframe(df.filter(), df)
 
     @given(df=dataframes_with_bool())
     def test_head(self, *, df: DataFrameWithBool) -> None:
-        self._assert(df.head(), df)
+        self._assert_dataframe(df.head(), df)
 
     @given(df1=dataframes_with_bool(), df2=dataframes_with_bool())
     def test_join(self, *, df1: DataFrameWithBool, df2: DataFrameWithBool) -> None:
-        self._assert(df1.join(df2, on=["x"]), df1)
+        self._assert_dataframe(df1.join(df2, on=["x"]), df1)
 
     @given(df=dataframes_with_bool())
     def test_rename(self, *, df: DataFrameWithBool) -> None:
-        self._assert(df.rename({"x": "x"}), df)
+        self._assert_dataframe(df.rename({"x": "x"}), df)
 
     @given(df=dataframes_with_bool())
     def test_reverse(self, *, df: DataFrameWithBool) -> None:
-        self._assert(df.reverse(), df)
+        self._assert_dataframe(df.reverse(), df)
 
     @given(df=dataframes_with_bool())
     def test_sample(self, *, df: DataFrameWithBool) -> None:
         _ = assume(not df.is_empty())
-        self._assert(df.sample(), df)
+        self._assert_dataframe(df.sample(), df)
 
     @given(df=dataframes_with_bool())
     def test_select(self, *, df: DataFrameWithBool) -> None:
-        self._assert(df.select(), df)
+        self._assert_dataframe(df.select(), df)
 
     @given(df=dataframes_with_bool())
     def test_shift(self, *, df: DataFrameWithBool) -> None:
-        self._assert(df.shift(), df)
+        self._assert_dataframe(df.shift(), df)
 
     @given(df=dataframes_with_bool())
     def test_tail(self, *, df: DataFrameWithBool) -> None:
-        self._assert(df.tail(), df)
+        self._assert_dataframe(df.tail(), df)
+
+    @given(df=dataframes_with_bool())
+    def test_to_series(self, *, df: DataFrameWithBool) -> None:
+        self._assert_series(df.to_series(), df)
 
     @given(df=dataframes_with_bool())
     def test_with_columns(self, *, df: DataFrameWithBool) -> None:
-        self._assert(df.with_columns(), df)
+        self._assert_dataframe(df.with_columns(), df)
 
     @given(df=dataframes_with_bool())
     def test_with_row_index(self, *, df: DataFrameWithBool) -> None:
-        self._assert(df.with_row_index(), df)
+        self._assert_dataframe(df.with_row_index(), df)
 
-    def _assert(self, result: DataFrameWithBool, df: DataFrameWithBool, /) -> None:
+    def _assert_dataframe(
+        self, result: DataFrameWithBool, df: DataFrameWithBool, /
+    ) -> None:
         assert isinstance(result, DataFrameWithBool)
+        assert result.metadata is df.metadata
+
+    def _assert_series(self, result: SeriesWithBool, df: DataFrameWithBool, /) -> None:
+        assert isinstance(result, SeriesWithBool)
         assert result.metadata is df.metadata

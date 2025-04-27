@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Generic, Self, TypeVar, override
+from typing import TYPE_CHECKING, Any, Generic, Self, TypeVar, cast, override
 
 from polars import DataFrame, Expr, Series
 from polars.dataframe.group_by import GroupBy
@@ -19,18 +19,41 @@ if TYPE_CHECKING:
         JoinValidation,  # pyright: ignore[reportPrivateImportUsage]
         MaintainOrderJoin,  # pyright: ignore[reportPrivateImportUsage]
         Orientation,  # pyright: ignore[reportPrivateImportUsage]
+        PolarsDataType,  # pyright: ignore[reportPrivateImportUsage]
         SchemaDefinition,  # pyright: ignore[reportPrivateImportUsage]
         SchemaDict,  # pyright: ignore[reportPrivateImportUsage]
     )
+    from polars.series.series import ArrayLike
 
 
-_T = TypeVar("_T")
+_TMetaData = TypeVar("_TMetaData")
 _TDataFrameWithMetaData = TypeVar(
     "_TDataFrameWithMetaData", bound="DataFrameWithMetaData"
 )
+_TSeriesWithMetaData = TypeVar("_TSeriesWithMetaData", bound="SeriesWithMetaData")
 
 
-class DataFrameWithMetaData(DataFrame, Generic[_T]):
+class SeriesWithMetaData(Series, Generic[_TMetaData, _TDataFrameWithMetaData]):
+    @override
+    def __init__(
+        self,
+        name: str | ArrayLike | None = None,
+        values: ArrayLike | None = None,
+        dtype: PolarsDataType | None = None,
+        *,
+        strict: bool = True,
+        nan_to_null: bool = False,
+        metadata: _TMetaData,
+    ) -> None:
+        super().__init__(name, values, dtype, strict=strict, nan_to_null=nan_to_null)
+        self.metadata = metadata
+
+    @property
+    def dataframe_with_metadata(self) -> type[_TDataFrameWithMetaData]:
+        return cast("type[_TDataFrameWithMetaData]", DataFrameWithMetaData)
+
+
+class DataFrameWithMetaData(DataFrame, Generic[_TMetaData, _TSeriesWithMetaData]):
     @override
     def __init__(
         self,
@@ -42,7 +65,7 @@ class DataFrameWithMetaData(DataFrame, Generic[_T]):
         orient: Orientation | None = None,
         infer_schema_length: int | None = N_INFER_DEFAULT,
         nan_to_null: bool = False,
-        metadata: _T,
+        metadata: _TMetaData,
     ) -> None:
         super().__init__(
             data,
@@ -109,7 +132,7 @@ class DataFrameWithMetaData(DataFrame, Generic[_T]):
         *by: IntoExpr | Iterable[IntoExpr],
         maintain_order: bool = False,
         **named_by: IntoExpr,
-    ) -> GroupByWithMetaData[Self, _T]:
+    ) -> GroupByWithMetaData[Self, _TMetaData]:
         group_by = super().group_by(*by, maintain_order=maintain_order, **named_by)
         return GroupByWithMetaData(
             group_by.df,
@@ -207,6 +230,12 @@ class DataFrameWithMetaData(DataFrame, Generic[_T]):
         return type(self)(data=super().tail(n), metadata=self.metadata)
 
     @override
+    def to_series(self, index: int = 0) -> _TSeriesWithMetaData:
+        return self.series_with_metadata(
+            values=super().to_series(index), metadata=self.metadata
+        )
+
+    @override
     def with_columns(
         self, *exprs: IntoExpr | Iterable[IntoExpr], **named_exprs: IntoExpr
     ) -> Self:
@@ -220,8 +249,12 @@ class DataFrameWithMetaData(DataFrame, Generic[_T]):
             data=super().with_row_index(name, offset), metadata=self.metadata
         )
 
+    @property
+    def series_with_metadata(self) -> type[_TSeriesWithMetaData]:
+        return cast("type[_TSeriesWithMetaData]", SeriesWithMetaData)
 
-class GroupByWithMetaData(GroupBy, Generic[_TDataFrameWithMetaData, _T]):
+
+class GroupByWithMetaData(GroupBy, Generic[_TDataFrameWithMetaData, _TMetaData]):
     @override
     def __init__(
         self,
@@ -229,7 +262,7 @@ class GroupByWithMetaData(GroupBy, Generic[_TDataFrameWithMetaData, _T]):
         *by: IntoExpr | Iterable[IntoExpr],
         maintain_order: bool,
         _cls: type[_TDataFrameWithMetaData],
-        _metadata: _T,
+        _metadata: _TMetaData,
         **named_by: IntoExpr,
     ) -> None:
         super().__init__(df, *by, maintain_order=maintain_order, **named_by)
