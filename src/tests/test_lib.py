@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from hypothesis import given
 from hypothesis.strategies import DrawFn, booleans, composite, lists, tuples
-from polars import DataFrame, Int64, String
+from polars import DataFrame, Int64, String, col
 from utilities.hypothesis import int64s, text_ascii
 
 from polars_subclasses.lib import DataFrameWithMetaData
@@ -29,7 +29,7 @@ class TestDataFrameWithMetaData:
 
     @given(df=dataframes_with_bool())
     def test_explode(self, *, df: DataFrameWithBool) -> None:
-        result = df.explode("x")
+        result = df.group_by("x").agg(col("x").alias("xs")).explode("xs")
         assert result.metadata is df.metadata
 
     @given(df=dataframes_with_bool())
