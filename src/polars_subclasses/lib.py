@@ -2,17 +2,20 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Generic, Self, TypeVar, override
 
-from polars import DataFrame
+from polars import DataFrame, Expr
 from polars.datatypes import N_INFER_DEFAULT
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable
+    from collections.abc import Iterable, Sequence
 
     from numpy import ndarray
     from polars._typing import (
         FrameInitTypes,
         IntoExpr,
         IntoExprColumn,
+        JoinStrategy,
+        JoinValidation,
+        MaintainOrderJoin,
         Orientation,
         SchemaDefinition,
         SchemaDict,
@@ -61,6 +64,37 @@ class DataFrameWithMetaData(DataFrame, Generic[_T]):
     ) -> Self:
         return type(self)(
             data=super().filter(*predicates, **constraints), metadata=self.metadata
+        )
+
+    @override
+    def join(
+        self,
+        other: DataFrame,
+        on: str | Expr | Sequence[str | Expr] | None = None,
+        how: JoinStrategy = "inner",
+        *,
+        left_on: str | Expr | Sequence[str | Expr] | None = None,
+        right_on: str | Expr | Sequence[str | Expr] | None = None,
+        suffix: str = "_right",
+        validate: JoinValidation = "m:m",
+        nulls_equal: bool = False,
+        coalesce: bool | None = None,
+        maintain_order: MaintainOrderJoin | None = None,
+    ) -> Self:
+        return type(self)(
+            data=super().join(
+                other,
+                on,
+                how,
+                left_on=left_on,
+                right_on=right_on,
+                suffix=suffix,
+                validate=validate,
+                nulls_equal=nulls_equal,
+                coalesce=coalesce,
+                maintain_order=maintain_order,
+            ),
+            metadata=self.metadata,
         )
 
     @override
