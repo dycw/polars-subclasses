@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from hypothesis import given
+from hypothesis import assume, given
 from hypothesis.strategies import DrawFn, booleans, composite, lists, tuples
 from polars import DataFrame, Int64, String, col
 from utilities.hypothesis import int64s, text_ascii
@@ -62,6 +62,11 @@ class TestDataFrameWithMetaData:
     @given(df=dataframes_with_bool())
     def test_reverse(self, *, df: DataFrameWithBool) -> None:
         self._assert(df.reverse(), df)
+
+    @given(df=dataframes_with_bool())
+    def test_sample(self, *, df: DataFrameWithBool) -> None:
+        _ = assume(not df.is_empty())
+        self._assert(df.sample(), df)
 
     @given(df=dataframes_with_bool())
     def test_select(self, *, df: DataFrameWithBool) -> None:

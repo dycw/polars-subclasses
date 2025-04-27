@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Generic, Self, TypeVar, override
 
-from polars import DataFrame, Expr
+from polars import DataFrame, Expr, Series
 from polars.dataframe.group_by import GroupBy
 from polars.datatypes import N_INFER_DEFAULT
 
@@ -166,6 +166,27 @@ class DataFrameWithMetaData(DataFrame, Generic[_T]):
     @override
     def reverse(self) -> Self:
         return type(self)(data=super().reverse(), metadata=self.metadata)
+
+    @override
+    def sample(
+        self,
+        n: int | Series | None = None,
+        *,
+        fraction: float | Series | None = None,
+        with_replacement: bool = False,
+        shuffle: bool = False,
+        seed: int | None = None,
+    ) -> Self:
+        return type(self)(
+            data=super().sample(
+                n,
+                fraction=fraction,
+                with_replacement=with_replacement,
+                shuffle=shuffle,
+                seed=seed,
+            ),
+            metadata=self.metadata,
+        )
 
     @override
     def select(
