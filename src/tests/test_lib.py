@@ -73,6 +73,10 @@ class TestDataFrameWithMetaData:
         self._assert(df.select(), df)
 
     @given(df=dataframes_with_bool())
+    def test_shift(self, *, df: DataFrameWithBool) -> None:
+        self._assert(df.shift(), df)
+
+    @given(df=dataframes_with_bool())
     def test_tail(self, *, df: DataFrameWithBool) -> None:
         self._assert(df.tail(), df)
 

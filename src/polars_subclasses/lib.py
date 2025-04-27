@@ -197,6 +197,12 @@ class DataFrameWithMetaData(DataFrame, Generic[_T]):
         )
 
     @override
+    def shift(self, n: int = 1, *, fill_value: IntoExpr | None = None) -> Self:
+        return type(self)(
+            data=super().shift(n, fill_value=fill_value), metadata=self.metadata
+        )
+
+    @override
     def tail(self, n: int = 5) -> Self:
         return type(self)(data=super().tail(n), metadata=self.metadata)
 
