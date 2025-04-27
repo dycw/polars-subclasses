@@ -113,5 +113,11 @@ class DataFrameWithMetaData(DataFrame, Generic[_T]):
             data=super().with_columns(*exprs, **named_exprs), metadata=self.metadata
         )
 
+    @override
+    def with_row_index(self, name: str = "index", offset: int = 0) -> Self:
+        return type(self)(
+            data=super().with_row_index(name, offset), metadata=self.metadata
+        )
+
 
 __all__ = ["DataFrameWithMetaData"]

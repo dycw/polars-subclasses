@@ -46,3 +46,8 @@ class TestDataFrameWithMetaData:
     def test_with_columns(self, *, df: DataFrameWithBool) -> None:
         result = df.with_columns()
         assert result.metadata is df.metadata
+
+    @given(df=dataframes_with_bool())
+    def test_with_row_index(self, *, df: DataFrameWithBool) -> None:
+        result = df.with_row_index()
+        assert result.metadata is df.metadata
