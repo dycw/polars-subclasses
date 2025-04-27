@@ -1,12 +1,21 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Generic, TypeVar, override
+from typing import TYPE_CHECKING, Generic, Self, TypeVar, override
 
 from polars import DataFrame
 from polars.datatypes import N_INFER_DEFAULT
 
 if TYPE_CHECKING:
-    from polars._typing import FrameInitTypes, Orientation, SchemaDefinition, SchemaDict
+    from collections.abc import Iterable
+
+    from polars._typing import (
+        FrameInitTypes,
+        IntoExpr,
+        Orientation,
+        SchemaDefinition,
+        SchemaDict,
+    )
+
 
 _T = TypeVar("_T")
 
@@ -23,7 +32,7 @@ class DataFrameWithMetaData(DataFrame, Generic[_T]):
         orient: Orientation | None = None,
         infer_schema_length: int | None = N_INFER_DEFAULT,
         nan_to_null: bool = False,
-        metadata: _T | None = None,
+        metadata: _T,
     ) -> None:
         super().__init__(
             data,
@@ -35,6 +44,14 @@ class DataFrameWithMetaData(DataFrame, Generic[_T]):
             nan_to_null=nan_to_null,
         )
         self.metadata = metadata
+
+    @override
+    def with_columns(
+        self, *exprs: IntoExpr | Iterable[IntoExpr], **named_exprs: IntoExpr
+    ) -> Self:
+        return type(self)(
+            super().with_columns(*exprs, **named_exprs), metadata=self.metadata
+        )
 
 
 __all__ = ["DataFrameWithMetaData"]
