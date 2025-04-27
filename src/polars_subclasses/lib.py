@@ -11,6 +11,7 @@ if TYPE_CHECKING:
 
     from numpy import ndarray
     from polars._typing import (
+        ColumnNameOrSelector,  # pyright: ignore[reportPrivateImportUsage]
         FrameInitTypes,  # pyright: ignore[reportPrivateImportUsage]
         IntoExpr,  # pyright: ignore[reportPrivateImportUsage]
         IntoExprColumn,  # pyright: ignore[reportPrivateImportUsage]
@@ -53,6 +54,16 @@ class DataFrameWithMetaData(DataFrame, Generic[_T]):
             nan_to_null=nan_to_null,
         )
         self.metadata = metadata
+
+    @override
+    def drop(
+        self,
+        *columns: ColumnNameOrSelector | Iterable[ColumnNameOrSelector],
+        strict: bool = True,
+    ) -> Self:
+        return type(self)(
+            data=super().drop(*columns, strict=strict), metadata=self.metadata
+        )
 
     @override
     def explode(

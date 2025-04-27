@@ -28,6 +28,12 @@ class TestDataFrameWithMetaData:
         assert isinstance(df, DataFrame)
 
     @given(df=dataframes_with_bool())
+    def test_drop(self, *, df: DataFrameWithBool) -> None:
+        result = df.drop()
+        assert isinstance(result, DataFrameWithBool)
+        assert result.metadata is df.metadata
+
+    @given(df=dataframes_with_bool())
     def test_explode(self, *, df: DataFrameWithBool) -> None:
         result = df.group_by("x").agg(col("x").alias("xs")).explode("xs")
         assert isinstance(result, DataFrameWithBool)
