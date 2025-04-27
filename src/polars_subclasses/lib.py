@@ -276,4 +276,4 @@ class GroupByWithMetaData(GroupBy, Generic[_TDataFrameWithMetaData, _TMetaData])
         return self.cls(data=super().agg(*aggs, **named_aggs), metadata=self.metadata)
 
 
-__all__ = ["DataFrameWithMetaData"]
+__all__ = ["DataFrameWithMetaData", "SeriesWithMetaData"]
