@@ -32,6 +32,11 @@ class TestDataFrameWithMetaData:
         result = df.filter()
         assert result.metadata is df.metadata
 
+    @given(df1=dataframes_with_bool(), df2=dataframes_with_bool())
+    def test_join(self, *, df1: DataFrameWithBool, df2: DataFrameWithBool) -> None:
+        result = df1.join(df2, on=["x"])
+        assert result.metadata is df1.metadata
+
     @given(df=dataframes_with_bool())
     def test_with_columns(self, *, df: DataFrameWithBool) -> None:
         result = df.with_columns()
