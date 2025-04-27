@@ -100,7 +100,7 @@ class DataFrameWithMetaData(DataFrame, Generic[_T]):
     @override
     def select(
         self, *exprs: IntoExpr | Iterable[IntoExpr], **named_exprs: IntoExpr
-    ) -> DataFrame:
+    ) -> Self:
         return type(self)(
             data=super().select(*exprs, **named_exprs), metadata=self.metadata
         )
@@ -111,6 +111,12 @@ class DataFrameWithMetaData(DataFrame, Generic[_T]):
     ) -> Self:
         return type(self)(
             data=super().with_columns(*exprs, **named_exprs), metadata=self.metadata
+        )
+
+    @override
+    def with_row_index(self, name: str = "index", offset: int = 0) -> Self:
+        return type(self)(
+            data=super().with_row_index(name, offset), metadata=self.metadata
         )
 
 
