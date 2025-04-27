@@ -20,7 +20,7 @@ def dataframes_with_bool(draw: DrawFn, /) -> DataFrameWithBool:
     )
 
 
-class TestDataFrameWithMeta:
+class TestDataFrameWithMetaData:
     @given(df=dataframes_with_bool())
     def test_main(self, *, df: DataFrameWithBool) -> None:
         assert isinstance(df, DataFrameWithBool)
