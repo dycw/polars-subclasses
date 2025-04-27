@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from polars_subclasses.lib import DataFrameWithMetaData
 
-__version__ = "0.1.6"
+__version__ = "0.1.7"
 
 
 __all__ = ["DataFrameWithMetaData"]
