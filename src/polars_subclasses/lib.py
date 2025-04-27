@@ -7,7 +7,7 @@ from polars.dataframe.group_by import GroupBy
 from polars.datatypes import N_INFER_DEFAULT
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Iterable, Sequence
+    from collections.abc import Callable, Collection, Iterable, Sequence
 
     from numpy import ndarray
     from polars._typing import (
@@ -64,6 +64,20 @@ class DataFrameWithMetaData(DataFrame, Generic[_T]):
         return type(self)(
             data=super().drop(*columns, strict=strict), metadata=self.metadata
         )
+
+    @override
+    def drop_nans(
+        self,
+        subset: ColumnNameOrSelector | Collection[ColumnNameOrSelector] | None = None,
+    ) -> DataFrame:
+        return type(self)(data=super().drop_nans(subset), metadata=self.metadata)
+
+    @override
+    def drop_nulls(
+        self,
+        subset: ColumnNameOrSelector | Collection[ColumnNameOrSelector] | None = None,
+    ) -> DataFrame:
+        return type(self)(data=super().drop_nulls(subset), metadata=self.metadata)
 
     @override
     def explode(
