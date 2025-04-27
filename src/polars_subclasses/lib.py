@@ -6,7 +6,7 @@ from polars import DataFrame, Expr
 from polars.datatypes import N_INFER_DEFAULT
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable, Sequence
+    from collections.abc import Callable, Iterable, Sequence
 
     from numpy import ndarray
     from polars._typing import (
@@ -95,6 +95,14 @@ class DataFrameWithMetaData(DataFrame, Generic[_T]):
                 maintain_order=maintain_order,
             ),
             metadata=self.metadata,
+        )
+
+    @override
+    def rename(
+        self, mapping: dict[str, str] | Callable[[str], str], *, strict: bool = True
+    ) -> Self:
+        return type(self)(
+            data=super().rename(mapping, strict=strict), metadata=self.metadata
         )
 
     @override

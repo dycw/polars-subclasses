@@ -38,6 +38,11 @@ class TestDataFrameWithMetaData:
         assert result.metadata is df1.metadata
 
     @given(df=dataframes_with_bool())
+    def test_rename(self, *, df: DataFrameWithBool) -> None:
+        result = df.rename({"x": "x"})
+        assert result.metadata is df.metadata
+
+    @given(df=dataframes_with_bool())
     def test_select(self, *, df: DataFrameWithBool) -> None:
         result = df.select()
         assert result.metadata is df.metadata
