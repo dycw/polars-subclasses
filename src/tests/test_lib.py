@@ -65,7 +65,6 @@ class TestDataFrameWithMetaData:
 
     @given(df=dataframes_with_bool())
     def test_sample(self, *, df: DataFrameWithBool) -> None:
-        _ = assume(not df.is_empty())
         self._assert(df.sample(), df)
 
     @given(df=dataframes_with_bool())
