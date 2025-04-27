@@ -11,15 +11,15 @@ if TYPE_CHECKING:
 
     from numpy import ndarray
     from polars._typing import (
-        FrameInitTypes,
-        IntoExpr,
-        IntoExprColumn,
-        JoinStrategy,
-        JoinValidation,
-        MaintainOrderJoin,
-        Orientation,
-        SchemaDefinition,
-        SchemaDict,
+        FrameInitTypes,  # pyright: ignore[reportPrivateImportUsage]
+        IntoExpr,  # pyright: ignore[reportPrivateImportUsage]
+        IntoExprColumn,  # pyright: ignore[reportPrivateImportUsage]
+        JoinStrategy,  # pyright: ignore[reportPrivateImportUsage]
+        JoinValidation,  # pyright: ignore[reportPrivateImportUsage]
+        MaintainOrderJoin,  # pyright: ignore[reportPrivateImportUsage]
+        Orientation,  # pyright: ignore[reportPrivateImportUsage]
+        SchemaDefinition,  # pyright: ignore[reportPrivateImportUsage]
+        SchemaDict,  # pyright: ignore[reportPrivateImportUsage]
     )
 
 
