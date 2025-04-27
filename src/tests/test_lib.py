@@ -20,12 +20,17 @@ def dataframes_with_bool(draw: DrawFn, /) -> DataFrameWithBool:
     )
 
 
-class TestDataFrameWithMeta:
+class TestDataFrameWithMetaData:
     @given(df=dataframes_with_bool())
     def test_main(self, *, df: DataFrameWithBool) -> None:
         assert isinstance(df, DataFrameWithBool)
         assert isinstance(df, DataFrameWithMetaData)
         assert isinstance(df, DataFrame)
+
+    @given(df=dataframes_with_bool())
+    def test_filter(self, *, df: DataFrameWithBool) -> None:
+        result = df.filter()
+        assert result.metadata is df.metadata
 
     @given(df=dataframes_with_bool())
     def test_with_columns(self, *, df: DataFrameWithBool) -> None:
