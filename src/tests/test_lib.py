@@ -47,6 +47,10 @@ class TestDataFrameWithMetaData:
     def test_filter(self, *, df: DataFrameWithBool) -> None:
         self._assert(df.filter(), df)
 
+    @given(df=dataframes_with_bool())
+    def test_head(self, *, df: DataFrameWithBool) -> None:
+        self._assert(df.head(), df)
+
     @given(df1=dataframes_with_bool(), df2=dataframes_with_bool())
     def test_join(self, *, df1: DataFrameWithBool, df2: DataFrameWithBool) -> None:
         self._assert(df1.join(df2, on=["x"]), df1)
@@ -58,6 +62,10 @@ class TestDataFrameWithMetaData:
     @given(df=dataframes_with_bool())
     def test_select(self, *, df: DataFrameWithBool) -> None:
         self._assert(df.select(), df)
+
+    @given(df=dataframes_with_bool())
+    def test_tail(self, *, df: DataFrameWithBool) -> None:
+        self._assert(df.tail(), df)
 
     @given(df=dataframes_with_bool())
     def test_with_columns(self, *, df: DataFrameWithBool) -> None:

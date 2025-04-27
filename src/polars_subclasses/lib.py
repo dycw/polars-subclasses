@@ -121,6 +121,10 @@ class DataFrameWithMetaData(DataFrame, Generic[_T]):
         )
 
     @override
+    def head(self, n: int = 5) -> DataFrame:
+        return type(self)(data=super().head(n), metadata=self.metadata)
+
+    @override
     def join(
         self,
         other: DataFrame,
@@ -166,6 +170,10 @@ class DataFrameWithMetaData(DataFrame, Generic[_T]):
         return type(self)(
             data=super().select(*exprs, **named_exprs), metadata=self.metadata
         )
+
+    @override
+    def tail(self, n: int = 5) -> DataFrame:
+        return type(self)(data=super().tail(n), metadata=self.metadata)
 
     @override
     def with_columns(
