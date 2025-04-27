@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import override
+
 from hypothesis import assume, given
 from hypothesis.strategies import DrawFn, booleans, composite, lists, tuples
 from polars import DataFrame, Int64, String, col
@@ -8,10 +10,18 @@ from utilities.hypothesis import int64s, text_ascii
 from polars_subclasses.lib import DataFrameWithMetaData, SeriesWithMetaData
 
 
-class SeriesWithBool(SeriesWithMetaData[bool, "DataFrameWithBool"]): ...
+class SeriesWithBool(SeriesWithMetaData[bool, "DataFrameWithBool"]):
+    @property
+    @override
+    def dataframe_with_metadata(self) -> type[DataFrameWithBool]:
+        return DataFrameWithBool
 
 
-class DataFrameWithBool(DataFrameWithMetaData[bool, "SeriesWithBool"]): ...
+class DataFrameWithBool(DataFrameWithMetaData[bool, "SeriesWithBool"]):
+    @property
+    @override
+    def series_with_metadata(self) -> type[SeriesWithBool]:
+        return SeriesWithBool
 
 
 @composite
