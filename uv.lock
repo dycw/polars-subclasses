@@ -61,7 +61,7 @@ wheels = [
 
 [[package]]
 name = "dycw-polars-subclasses"
-version = "0.1.1"
+version = "0.1.2"
 source = { editable = "." }
 dependencies = [
     { name = "polars-lts-cpu" },
@@ -80,14 +80,14 @@ dev = [{ name = "dycw-utilities", extras = ["test"] }]
 
 [[package]]
 name = "dycw-utilities"
-version = "0.111.1"
+version = "0.112.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/65/3d/d3b5209f67534b445ad7e45361b5747e8695ed5bf682dcece5f991010984/dycw_utilities-0.111.1.tar.gz", hash = "sha256:94550897926862d52a88c1c625b307a2042e805a07e3b73a30f33945180669bd", size = 279517, upload_time = "2025-04-27T03:57:35.206Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/4d/be/b17f72c1d747faa1fc3c09fb771cccccff40cd7db6863f6c5dc9ef2871c5/dycw_utilities-0.112.0.tar.gz", hash = "sha256:80ed24a96b7f69967807c8f25c7c05475d3ef42b93e4d250e70b6606e80b195e", size = 279771, upload_time = "2025-04-27T05:26:52.613Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a0/1d/5c1aa1b6777136b5073632446c71a97765b8e38ab95cb96d245cb3373faf/dycw_utilities-0.111.1-py3-none-any.whl", hash = "sha256:c96cc41a009674ca6465605b6244bb3cc6632518d544845988bcc5bdcc63c5f2", size = 181239, upload_time = "2025-04-27T03:57:31.67Z" },
+    { url = "https://files.pythonhosted.org/packages/04/a0/5c87b5f926a2443d2115f6e356f89c57e63239320e9d93a1465d328d4ee5/dycw_utilities-0.112.0-py3-none-any.whl", hash = "sha256:a1dce1e8582f322267d964f8a2bd72cfa47f48fc85cbb117918f677adfe4138b", size = 181419, upload_time = "2025-04-27T05:26:49.629Z" },
 ]
 
 [package.optional-dependencies]
