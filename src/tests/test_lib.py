@@ -28,6 +28,11 @@ class TestDataFrameWithMetaData:
         assert isinstance(df, DataFrame)
 
     @given(df=dataframes_with_bool())
+    def test_explode(self, *, df: DataFrameWithBool) -> None:
+        result = df.explode("x")
+        assert result.metadata is df.metadata
+
+    @given(df=dataframes_with_bool())
     def test_filter(self, *, df: DataFrameWithBool) -> None:
         result = df.filter()
         assert result.metadata is df.metadata

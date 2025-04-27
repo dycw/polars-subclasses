@@ -51,6 +51,14 @@ class DataFrameWithMetaData(DataFrame, Generic[_T]):
         self.metadata = metadata
 
     @override
+    def explode(
+        self, columns: str | Expr | Sequence[str | Expr], *more_columns: str | Expr
+    ) -> Self:
+        return type(self)(
+            data=super().explode(columns, *more_columns), metadata=self.metadata
+        )
+
+    @override
     def filter(
         self,
         *predicates: (
