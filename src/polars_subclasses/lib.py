@@ -69,14 +69,14 @@ class DataFrameWithMetaData(DataFrame, Generic[_T]):
     def drop_nans(
         self,
         subset: ColumnNameOrSelector | Collection[ColumnNameOrSelector] | None = None,
-    ) -> DataFrame:
+    ) -> Self:
         return type(self)(data=super().drop_nans(subset), metadata=self.metadata)
 
     @override
     def drop_nulls(
         self,
         subset: ColumnNameOrSelector | Collection[ColumnNameOrSelector] | None = None,
-    ) -> DataFrame:
+    ) -> Self:
         return type(self)(data=super().drop_nulls(subset), metadata=self.metadata)
 
     @override
@@ -121,7 +121,7 @@ class DataFrameWithMetaData(DataFrame, Generic[_T]):
         )
 
     @override
-    def head(self, n: int = 5) -> DataFrame:
+    def head(self, n: int = 5) -> Self:
         return type(self)(data=super().head(n), metadata=self.metadata)
 
     @override
@@ -176,7 +176,7 @@ class DataFrameWithMetaData(DataFrame, Generic[_T]):
         )
 
     @override
-    def tail(self, n: int = 5) -> DataFrame:
+    def tail(self, n: int = 5) -> Self:
         return type(self)(data=super().tail(n), metadata=self.metadata)
 
     @override
