@@ -100,7 +100,7 @@ class DataFrameWithMetaData(DataFrame, Generic[_T]):
     @override
     def select(
         self, *exprs: IntoExpr | Iterable[IntoExpr], **named_exprs: IntoExpr
-    ) -> DataFrame:
+    ) -> Self:
         return type(self)(
             data=super().select(*exprs, **named_exprs), metadata=self.metadata
         )
