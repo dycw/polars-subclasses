@@ -64,6 +64,10 @@ class TestDataFrameWithMetaData:
         self._assert(df.reverse(), df)
 
     @given(df=dataframes_with_bool())
+    def test_sample(self, *, df: DataFrameWithBool) -> None:
+        self._assert(df.sample(), df)
+
+    @given(df=dataframes_with_bool())
     def test_select(self, *, df: DataFrameWithBool) -> None:
         self._assert(df.select(), df)
 
