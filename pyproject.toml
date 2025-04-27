@@ -15,14 +15,11 @@ dev = [
 [project]
 authors = [{name = "Derek Wan", email = "d.wan@icloud.com"}]
 dependencies = [
-  "atomicwrites>=1.4.1",
-  "dycw-utilities>=0.110.8",
-  "rich>=14.0.0",
-  "whenever>=0.7.3",
+  "polars-lts-cpu >= 1.27.1",
 ]
-name = "polars-subclasses"
+name = "dycw-polars-subclasses"
 readme = "README.md"
-requires-python = ">= 3.13"
+requires-python = ">= 3.12"
 version = "0.1.0"
 
 # bump-my-version
@@ -64,7 +61,7 @@ packages = ["src/polars_subclasses"]
 # nitpick
 [tool.nitpick]
 style = [
-  "https://raw.githubusercontent.com/dycw/nitpick/master/styles/3.13.toml",
+  "https://raw.githubusercontent.com/dycw/nitpick/master/styles/3.12.toml",
   "https://raw.githubusercontent.com/dycw/nitpick/master/styles/common.toml",
 ]
 
@@ -72,7 +69,7 @@ style = [
 [tool.pyright]
 deprecateTypingAliases = true
 enableReachabilityAnalysis = false
-pythonVersion = "3.13"
+pythonVersion = "3.12"
 reportAny = false
 reportCallInDefaultInitializer = true
 reportImplicitOverride = true
@@ -116,7 +113,7 @@ xfail_strict = true
 # ruff
 [tool.ruff]
 src = ["src"]
-target-version = "py313"
+target-version = "py312"
 unsafe-fixes = true
 
 [tool.ruff.format]
