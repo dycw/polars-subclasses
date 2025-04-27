@@ -87,6 +87,13 @@ class TestDataFrameWithMetaData:
     def test_select(self, *, df: DataFrameWithBool) -> None:
         self._assert_dataframe(df.select(), df)
 
+    @given(bool_=booleans())
+    def test_series_with_metadata(self, *, bool_: bool) -> None:
+        assert (
+            DataFrameWithMetaData(metadata=bool_).series_with_metadata
+            is SeriesWithMetaData
+        )
+
     @given(df=dataframes_with_bool())
     def test_shift(self, *, df: DataFrameWithBool) -> None:
         self._assert_dataframe(df.shift(), df)
@@ -116,3 +123,12 @@ class TestDataFrameWithMetaData:
     def _assert_series(self, result: SeriesWithBool, df: DataFrameWithBool, /) -> None:
         assert isinstance(result, SeriesWithBool)
         assert result.metadata is df.metadata
+
+
+class TestSeriesWithMetaData:
+    @given(bool_=booleans())
+    def test_dataframe_with_metadata(self, *, bool_: bool) -> None:
+        assert (
+            SeriesWithMetaData(metadata=bool_).dataframe_with_metadata
+            is DataFrameWithMetaData
+        )
