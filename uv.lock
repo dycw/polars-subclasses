@@ -70,6 +70,7 @@ dependencies = [
 [package.dev-dependencies]
 dev = [
     { name = "dycw-utilities", extra = ["test"] },
+    { name = "numpy" },
     { name = "tzdata" },
 ]
 
@@ -79,6 +80,7 @@ requires-dist = [{ name = "polars-lts-cpu", specifier = ">=1.27.1" }]
 [package.metadata.requires-dev]
 dev = [
     { name = "dycw-utilities", extras = ["test"] },
+    { name = "numpy", specifier = ">=2.2.5" },
     { name = "tzdata", specifier = ">=2025.2" },
 ]
 

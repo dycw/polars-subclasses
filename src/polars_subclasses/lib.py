@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Generic, Self, TypeVar, override
+from typing import TYPE_CHECKING, Any, Generic, Self, TypeVar, override
 
 from polars import DataFrame
 from polars.datatypes import N_INFER_DEFAULT
@@ -8,9 +8,11 @@ from polars.datatypes import N_INFER_DEFAULT
 if TYPE_CHECKING:
     from collections.abc import Iterable
 
+    from numpy import ndarray
     from polars._typing import (
         FrameInitTypes,
         IntoExpr,
+        IntoExprColumn,
         Orientation,
         SchemaDefinition,
         SchemaDict,
@@ -46,11 +48,27 @@ class DataFrameWithMetaData(DataFrame, Generic[_T]):
         self.metadata = metadata
 
     @override
+    def filter(
+        self,
+        *predicates: (
+            IntoExprColumn
+            | Iterable[IntoExprColumn]
+            | bool
+            | list[bool]
+            | ndarray[Any, Any]
+        ),
+        **constraints: Any,
+    ) -> Self:
+        return type(self)(
+            data=super().filter(*predicates, **constraints), metadata=self.metadata
+        )
+
+    @override
     def with_columns(
         self, *exprs: IntoExpr | Iterable[IntoExpr], **named_exprs: IntoExpr
     ) -> Self:
         return type(self)(
-            super().with_columns(*exprs, **named_exprs), metadata=self.metadata
+            data=super().with_columns(*exprs, **named_exprs), metadata=self.metadata
         )
 
 

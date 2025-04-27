@@ -9,6 +9,7 @@ requires = ["hatchling"]
 [dependency-groups]
 dev = [
   "dycw-utilities[test]",
+  "numpy >= 2.2.5",
   "tzdata >= 2025.2",
 ]
 
